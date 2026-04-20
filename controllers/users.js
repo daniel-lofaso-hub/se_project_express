@@ -1,4 +1,4 @@
-const User = require("../models/user.js");
+const User = require("../models/user");
 const {
   BAD_REQUEST_STATUS_CODE,
   NOT_FOUND_STATUS_CODE,
