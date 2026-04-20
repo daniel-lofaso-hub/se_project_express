@@ -1,4 +1,4 @@
-const ClothingItem = require("../models/ClothingItem");
+const ClothingItem = require("../models/clothingItem.js");
 const {
   BAD_REQUEST_STATUS_CODE,
   NOT_FOUND_STATUS_CODE,
@@ -51,7 +51,8 @@ const deleteItem = (req, res) => {
         return res
           .status(NOT_FOUND_STATUS_CODE)
           .send({ message: "Requested resource not found" });
-      } if (err.name === "CastError") {
+      }
+      if (err.name === "CastError") {
         return res
           .status(BAD_REQUEST_STATUS_CODE)
           .send({ message: err.message });
@@ -80,7 +81,8 @@ const likeItem = (req, res) => {
         return res
           .status(NOT_FOUND_STATUS_CODE)
           .send({ message: "Requested resource not found" });
-      } if (err.name === "CastError") {
+      }
+      if (err.name === "CastError") {
         return res
           .status(BAD_REQUEST_STATUS_CODE)
           .send({ message: err.message });
@@ -109,7 +111,8 @@ const unlikeItem = (req, res) => {
         return res
           .status(NOT_FOUND_STATUS_CODE)
           .send({ message: "Requested resource not found" });
-      } if (err.name === "CastError") {
+      }
+      if (err.name === "CastError") {
         return res
           .status(BAD_REQUEST_STATUS_CODE)
           .send({ message: err.message });
