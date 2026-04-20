@@ -14,14 +14,14 @@ mongoose
     console.error("Error connecting to MongoDB:", err);
   });
 
-app.use(express.json());
-app.use("/", mainRouter);
 app.use((req, res, next) => {
   req.user = {
-    _id: '69e56e623141efe087c845cc'
+    _id: "69e56e623141efe087c845cc",
   };
   next();
 });
+app.use(express.json());
+app.use("/", mainRouter);
 
 app.listen(PORT, () => {
   console.log(`App listening at port ${PORT}`);
