@@ -10,19 +10,6 @@ const {
 } = require("../utils/errors");
 const { JWT_SECRET } = require("../utils/config");
 
-const getUsers = (req, res) => {
-  User.find({})
-    .then((users) => {
-      return res.status(200).send(users);
-    })
-    .catch((err) => {
-      console.error(err);
-      return res
-        .status(INTERNAL_SERVER_ERROR)
-        .send({ message: "An error has occurred on the server." });
-    });
-};
-
 const getCurrentUser = async (req, res) => {
   try {
     const { _id: userId } = req.user;
@@ -108,7 +95,7 @@ const updateUser = async (req, res) => {
         .send({ message: "Requested resource not found" });
     }
 
-    res.status(200).send(user);
+    return res.status(200).send(user);
   } catch (err) {
     console.error(err);
     if (err.name === "ValidationError") {
