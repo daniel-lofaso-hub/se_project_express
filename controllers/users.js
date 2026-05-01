@@ -1,3 +1,6 @@
+const bcrypt = require("bcryptjs");
+const jwt = require("jsonwebtoken");
+
 const User = require("../models/user");
 const {
   BAD_REQUEST,
@@ -6,13 +9,11 @@ const {
   INTERNAL_SERVER_ERROR,
 } = require("../utils/errors");
 const { JWT_SECRET } = require("../utils/config");
-const bcrypt = require("bcryptjs");
-const jwt = require("jsonwebtoken");
 
 const getUsers = (req, res) => {
   User.find({})
     .then((users) => {
-      res.status(200).send(users);
+      return res.status(200).send(users);
     })
     .catch((err) => {
       console.error(err);
@@ -28,7 +29,7 @@ const getCurrentUser = async (req, res) => {
 
     const user = await User.findById(userId).orFail();
 
-    res.status(200).send(user);
+    return res.status(200).send(user);
   } catch (err) {
     console.error(err);
     if (err.name === "DocumentNotFoundError") {
@@ -57,7 +58,7 @@ const createUser = async (req, res) => {
       email,
       password: hashedPassword,
     });
-    res.status(201).send(user);
+    return res.status(201).send(user);
   } catch (err) {
     console.error(err);
 
@@ -84,9 +85,9 @@ const login = async (req, res) => {
     const token = jwt.sign({ _id: user._id }, JWT_SECRET, {
       expiresIn: "7d",
     });
-    res.send({ token });
+    return res.send({ token });
   } catch (err) {
-    res.status(401).send({ message: "Incorrect email or password" });
+    return res.status(401).send({ message: "Incorrect email or password" });
   }
 };
 
@@ -124,4 +125,4 @@ const updateUser = async (req, res) => {
   }
 };
 
-module.exports = { getUsers, getCurrentUser, createUser, login, updateUser };
+module.exports = { getCurrentUser, createUser, login, updateUser };
