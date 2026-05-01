@@ -37,6 +37,12 @@ const userSchema = new mongoose.Schema({
   },
 });
 
+userSchema.methods.toJSON = function toJSON() {
+  const user = this.toObject();
+  delete user.password;
+  return user;
+};
+
 userSchema.statics.findUserByCredentials = function findUserByCredentials(
   email,
   password

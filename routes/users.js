@@ -7,8 +7,8 @@ const {
 } = require("../controllers/users");
 const auth = require("../middlewares/auth");
 
-router.get("/users/me", auth, getCurrentUser);
-router.patch("/users/me", auth, updateUser);
+router.get("/me", auth, getCurrentUser);
+router.patch("/me", auth, updateUser);
 router.post("/signin", login);
 router.post("/signup", createUser);
 
