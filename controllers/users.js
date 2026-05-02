@@ -7,6 +7,7 @@ const {
   NOT_FOUND,
   CONFLICT,
   INTERNAL_SERVER_ERROR,
+  UNAUTHORIZED,
 } = require("../utils/errors");
 const { JWT_SECRET } = require("../utils/config");
 
@@ -80,7 +81,7 @@ const login = async (req, res) => {
     });
     return res.send({ token });
   } catch (err) {
-    return res.status(401).send({ message: "Incorrect email or password" });
+    return res.status(UNAUTHORIZED).send({ message: "Authorization required" });
   }
 };
 

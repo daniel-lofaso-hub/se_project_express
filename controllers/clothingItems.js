@@ -3,6 +3,7 @@ const {
   BAD_REQUEST,
   NOT_FOUND,
   INTERNAL_SERVER_ERROR,
+  FORBIDDEN,
 } = require("../utils/errors");
 
 const getItems = (req, res) => {
@@ -49,7 +50,7 @@ const deleteItem = async (req, res) => {
 
     if (!item.owner.equals(req.user._id)) {
       return res
-        .status(403)
+        .status(FORBIDDEN)
         .send({ message: "You do not have permission to delete this item." });
     }
 
