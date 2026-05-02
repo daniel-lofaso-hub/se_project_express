@@ -4,5 +4,5 @@ This project is an introduction into using Express. In the project, we use ESLin
 
 ## Project Pitch Video
 
-Check out [Daniel_LoFaso_ProjectPitch_WTWR_Express](https://www.loom.com/share/0b7a6e31db624664bffc443cfa2dfc63https://www.loom.com/share/0b7a6e31db624664bffc443cfa2dfc63), where I describe my
+Check out [Daniel_LoFaso_ProjectPitch_WTWR_Express](https://www.loom.com/share/0b7a6e31db624664bffc443cfa2dfc63), where I describe my
 project and some challenges I faced while building it.
