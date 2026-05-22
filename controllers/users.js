@@ -11,7 +11,13 @@ const {
 } = require("../utils/errors");
 const { JWT_SECRET } = require("../utils/config");
 
-const getCurrentUser = async (req, res) => {
+const NotFoundError = require("../errors/not-found-err");
+const BadRequestError = require("../errors/bad-request-err");
+const InternalServerError = require("../errors/internal-server-err");
+const ConflictError = require("../errors/conflict-err");
+const UnauthorizedError = require("../errors/unauthorized-err");
+
+const getCurrentUser = async (req, res, next) => {
   try {
     const { _id: userId } = req.user;
 
@@ -21,16 +27,14 @@ const getCurrentUser = async (req, res) => {
   } catch (err) {
     console.error(err);
     if (err.name === "DocumentNotFoundError") {
-      return res
-        .status(NOT_FOUND)
-        .send({ message: "Requested resource not found" });
+      return next(new NotFoundError("Requested resource not found"));
     }
     if (err.name === "CastError") {
-      return res.status(BAD_REQUEST).send({ message: "Invalid data" });
+      return next(new BadRequestError("Invalid data"));
     }
-    return res
-      .status(INTERNAL_SERVER_ERROR)
-      .send({ message: "An error has occurred on the server." });
+    return next(
+      new InternalServerError("An error has occurred on the server.")
+    );
   }
 };
 
@@ -51,16 +55,14 @@ const createUser = async (req, res) => {
     console.error(err);
 
     if (err.name === "ValidationError") {
-      return res.status(BAD_REQUEST).send({ message: "Invalid data" });
+      return next(new BadRequestError("Invalid data"));
     }
     if (err.code === 11000) {
-      return res
-        .status(CONFLICT)
-        .send({ message: "A user with this email already exists" });
+      return next(new ConflictError("A user with this email already exists"));
     }
-    return res
-      .status(INTERNAL_SERVER_ERROR)
-      .send({ message: "An error has occurred on the server." });
+    return next(
+      new InternalServerError("An error has occurred on the server.")
+    );
   }
 };
 
@@ -69,9 +71,7 @@ const login = async (req, res) => {
     const { email, password } = req.body;
 
     if (!email || !password) {
-      return res
-        .status(BAD_REQUEST)
-        .send({ message: "Email and password are required" });
+      return next(new BadRequestError("Email and password are required"));
     }
 
     const user = await User.findUserByCredentials(email, password);
@@ -81,7 +81,7 @@ const login = async (req, res) => {
     });
     return res.send({ token });
   } catch (err) {
-    return res.status(UNAUTHORIZED).send({ message: "Authorization required" });
+    return next(new UnauthorizedError("Incorrect email or password"));
   }
 };
 
@@ -97,25 +97,21 @@ const updateUser = async (req, res) => {
     );
 
     if (!user) {
-      return res
-        .status(NOT_FOUND)
-        .send({ message: "Requested resource not found" });
+      return next(new NotFoundError("Requested resource not found"));
     }
 
     return res.status(200).send(user);
   } catch (err) {
     console.error(err);
     if (err.name === "ValidationError") {
-      return res.status(BAD_REQUEST).send({ message: "Invalid data" });
+      return next(new BadRequestError("Invalid data"));
     }
     if (err.name === "DocumentNotFoundError") {
-      return res
-        .status(NOT_FOUND)
-        .send({ message: "Requested resource not found" });
+      return next(new NotFoundError("Requested resource not found"));
     }
-    return res
-      .status(INTERNAL_SERVER_ERROR)
-      .send({ message: "An error has occurred on the server." });
+    return next(
+      new InternalServerError("An error has occurred on the server.")
+    );
   }
 };
 
