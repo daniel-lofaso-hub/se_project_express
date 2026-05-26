@@ -1,17 +1,11 @@
 const ClothingItem = require("../models/clothingItem");
-const {
-  BAD_REQUEST,
-  NOT_FOUND,
-  INTERNAL_SERVER_ERROR,
-  FORBIDDEN,
-} = require("../utils/errors");
 
 const badRequestError = require("../errors/bad-request-err");
 const notFoundError = require("../errors/not-found-err");
 const internalServerError = require("../errors/internal-server-err");
 const forbiddenError = require("../errors/forbidden-err");
 
-const getItems = (req, res) => {
+const getItems = (req, res, next) => {
   ClothingItem.find({})
     .then((items) => {
       res.status(200).send(items);
@@ -24,7 +18,7 @@ const getItems = (req, res) => {
     });
 };
 
-const createItem = (req, res) => {
+const createItem = (req, res, next) => {
   console.log(req.user._id);
   const { name, weather, imageUrl } = req.body;
 
@@ -43,7 +37,7 @@ const createItem = (req, res) => {
     });
 };
 
-const deleteItem = async (req, res) => {
+const deleteItem = async (req, res, next) => {
   try {
     const item = await ClothingItem.findById(req.params.itemId);
 
@@ -70,7 +64,7 @@ const deleteItem = async (req, res) => {
   }
 };
 
-const likeItem = (req, res) => {
+const likeItem = (req, res, next) => {
   console.log(req.user._id);
 
   ClothingItem.findByIdAndUpdate(
@@ -96,7 +90,7 @@ const likeItem = (req, res) => {
     });
 };
 
-const unlikeItem = (req, res) => {
+const unlikeItem = (req, res, next) => {
   console.log(req.user._id);
 
   ClothingItem.findByIdAndUpdate(

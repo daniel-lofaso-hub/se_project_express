@@ -31,7 +31,7 @@ const getCurrentUser = async (req, res, next) => {
   }
 };
 
-const createUser = async (req, res) => {
+const createUser = async (req, res, next) => {
   try {
     const { name, avatar, email, password } = req.body;
 
@@ -59,7 +59,7 @@ const createUser = async (req, res) => {
   }
 };
 
-const login = async (req, res) => {
+const login = async (req, res, next) => {
   try {
     const { email, password } = req.body;
 
@@ -78,7 +78,7 @@ const login = async (req, res) => {
   }
 };
 
-const updateUser = async (req, res) => {
+const updateUser = async (req, res, next) => {
   try {
     const { _id: userId } = req.user;
     const { name, avatar } = req.body;
