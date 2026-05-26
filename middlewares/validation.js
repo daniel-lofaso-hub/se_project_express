@@ -19,6 +19,10 @@ const validateItemBody = celebrate({
       "string.empty": 'The "imageUrl" field must be filled in',
       "string.uri": 'the "imageUrl" field must be a valid url',
     }),
+    weather: Joi.string().valid("hot", "warm", "cold").required().messages({
+      "any.only": 'The "weather" field must be one of hot, warm, or cold',
+      "string.empty": 'The "weather" field must be filled in',
+    }),
   }),
 });
 
