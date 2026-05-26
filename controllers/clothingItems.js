@@ -1,9 +1,9 @@
 const ClothingItem = require("../models/clothingItem");
 
-const badRequestError = require("../errors/bad-request-err");
-const notFoundError = require("../errors/not-found-err");
-const internalServerError = require("../errors/internal-server-err");
-const forbiddenError = require("../errors/forbidden-err");
+const BadRequestError = require("../errors/bad-request-err");
+const NotFoundError = require("../errors/not-found-err");
+const InternalServerError = require("../errors/internal-server-err");
+const ForbiddenError = require("../errors/forbidden-err");
 
 const getItems = (req, res, next) => {
   ClothingItem.find({})
@@ -13,7 +13,7 @@ const getItems = (req, res, next) => {
     .catch((err) => {
       console.error(err);
       return next(
-        new internalServerError("An error has occurred on the server.")
+        new InternalServerError("An error has occurred on the server.")
       );
     });
 };
@@ -29,10 +29,10 @@ const createItem = (req, res, next) => {
     .catch((err) => {
       console.error(err);
       if (err.name === "ValidationError") {
-        return next(new badRequestError("Invalid data"));
+        return next(new BadRequestError("Invalid data"));
       }
       return next(
-        new internalServerError("An error has occurred on the server.")
+        new InternalServerError("An error has occurred on the server.")
       );
     });
 };
@@ -42,12 +42,12 @@ const deleteItem = async (req, res, next) => {
     const item = await ClothingItem.findById(req.params.itemId);
 
     if (!item) {
-      return next(new notFoundError("Requested resource not found"));
+      return next(new NotFoundError("Requested resource not found"));
     }
 
     if (!item.owner.equals(req.user._id)) {
       return next(
-        new forbiddenError("You do not have permission to delete this item.")
+        new ForbiddenError("You do not have permission to delete this item.")
       );
     }
 
@@ -56,10 +56,10 @@ const deleteItem = async (req, res, next) => {
   } catch (err) {
     console.error(err);
     if (err.name === "CastError") {
-      return next(new badRequestError("Invalid item ID"));
+      return next(new BadRequestError("Invalid item ID"));
     }
     return next(
-      new internalServerError("An error has occurred on the server.")
+      new InternalServerError("An error has occurred on the server.")
     );
   }
 };
@@ -79,13 +79,13 @@ const likeItem = (req, res, next) => {
     .catch((err) => {
       console.error(err);
       if (err.name === "DocumentNotFoundError") {
-        return next(new notFoundError("Requested resource not found"));
+        return next(new NotFoundError("Requested resource not found"));
       }
       if (err.name === "CastError") {
-        return next(new badRequestError("Invalid data"));
+        return next(new BadRequestError("Invalid data"));
       }
       return next(
-        new internalServerError("An error has occurred on the server.")
+        new InternalServerError("An error has occurred on the server.")
       );
     });
 };
@@ -105,13 +105,13 @@ const unlikeItem = (req, res, next) => {
     .catch((err) => {
       console.error(err);
       if (err.name === "DocumentNotFoundError") {
-        return next(new notFoundError("Requested resource not found"));
+        return next(new NotFoundError("Requested resource not found"));
       }
       if (err.name === "CastError") {
-        return next(new badRequestError("Invalid data"));
+        return next(new BadRequestError("Invalid data"));
       }
       return next(
-        new internalServerError("An error has occurred on the server.")
+        new InternalServerError("An error has occurred on the server.")
       );
     });
 };
