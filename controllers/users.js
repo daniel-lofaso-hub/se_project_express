@@ -43,7 +43,12 @@ const createUser = async (req, res, next) => {
       email,
       password: hashedPassword,
     });
-    return res.status(201).send(user);
+
+    const token = jwt.sign({ _id: user._id }, JWT_SECRET, {
+      expiresIn: "7d",
+    });
+
+    return res.status(201).send({ token, user });
   } catch (err) {
     console.error(err);
 
