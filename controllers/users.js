@@ -44,11 +44,21 @@ const createUser = async (req, res, next) => {
       password: hashedPassword,
     });
 
-    const token = jwt.sign({ _id: user._id }, JWT_SECRET, {
-      expiresIn: "7d",
-    });
+    let token;
+    try {
+      token = jwt.sign({ _id: user._id }, JWT_SECRET, {
+        expiresIn: "7d",
+      });
+    } catch (tokenErr) {
+      return next(
+        new InternalServerError("An error has occurred on the server.")
+      );
+    }
 
-    return res.status(201).send({ token, user });
+    const userResponse = user.toObject();
+    delete userResponse.password;
+
+    return res.status(201).send({ token, user: userResponse });
   } catch (err) {
     console.error(err);
 
