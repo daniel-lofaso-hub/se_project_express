@@ -2,7 +2,6 @@ const ClothingItem = require("../models/clothingItem");
 
 const BadRequestError = require("../errors/bad-request-err");
 const NotFoundError = require("../errors/not-found-err");
-const InternalServerError = require("../errors/internal-server-err");
 const ForbiddenError = require("../errors/forbidden-err");
 
 const getItems = (req, res, next) => {
@@ -12,9 +11,7 @@ const getItems = (req, res, next) => {
     })
     .catch((err) => {
       console.error(err);
-      return next(
-        new InternalServerError("An error has occurred on the server.")
-      );
+      return next(err);
     });
 };
 
@@ -31,9 +28,7 @@ const createItem = (req, res, next) => {
       if (err.name === "ValidationError") {
         return next(new BadRequestError("Invalid data"));
       }
-      return next(
-        new InternalServerError("An error has occurred on the server.")
-      );
+      return next(err);
     });
 };
 
@@ -58,9 +53,7 @@ const deleteItem = async (req, res, next) => {
     if (err.name === "CastError") {
       return next(new BadRequestError("Invalid item ID"));
     }
-    return next(
-      new InternalServerError("An error has occurred on the server.")
-    );
+    return next(err);
   }
 };
 
@@ -84,9 +77,7 @@ const likeItem = (req, res, next) => {
       if (err.name === "CastError") {
         return next(new BadRequestError("Invalid data"));
       }
-      return next(
-        new InternalServerError("An error has occurred on the server.")
-      );
+      return next(err);
     });
 };
 
@@ -110,9 +101,7 @@ const unlikeItem = (req, res, next) => {
       if (err.name === "CastError") {
         return next(new BadRequestError("Invalid data"));
       }
-      return next(
-        new InternalServerError("An error has occurred on the server.")
-      );
+      return next(err);
     });
 };
 

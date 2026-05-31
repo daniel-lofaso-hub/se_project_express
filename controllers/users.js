@@ -6,7 +6,6 @@ const { JWT_SECRET } = require("../utils/config");
 
 const NotFoundError = require("../errors/not-found-err");
 const BadRequestError = require("../errors/bad-request-err");
-const InternalServerError = require("../errors/internal-server-err");
 const ConflictError = require("../errors/conflict-err");
 const UnauthorizedError = require("../errors/unauthorized-err");
 
@@ -25,9 +24,7 @@ const getCurrentUser = async (req, res, next) => {
     if (err.name === "CastError") {
       return next(new BadRequestError("Invalid data"));
     }
-    return next(
-      new InternalServerError("An error has occurred on the server.")
-    );
+    return next(err);
   }
 };
 
@@ -66,9 +63,7 @@ const createUser = async (req, res, next) => {
     if (err.code === 11000) {
       return next(new ConflictError("A user with this email already exists"));
     }
-    return next(
-      new InternalServerError("An error has occurred on the server.")
-    );
+    return next(err);
   }
 };
 
@@ -115,9 +110,7 @@ const updateUser = async (req, res, next) => {
     if (err.name === "DocumentNotFoundError") {
       return next(new NotFoundError("Requested resource not found"));
     }
-    return next(
-      new InternalServerError("An error has occurred on the server.")
-    );
+    return next(err);
   }
 };
 
